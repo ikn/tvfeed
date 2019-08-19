@@ -4,7 +4,7 @@ Tvheadend.
 This isn't meant to be a general-use tool, since the results are filtered in
 specific ways (although these are somewhat configurable), and it's somewhat
 specific to UK DVB-T broadcasts.  It could be taken as a sample program for
-[http://ikn.org.uk/pyepgdb](pyepgdb) usage.
+[pyepgdb](http://ikn.org.uk/pyepgdb) usage.
 
 # License
 
