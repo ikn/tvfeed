@@ -1,0 +1,4 @@
+/build/
+/dist/
+/tvfeed.egg-info
+__pycache__/
