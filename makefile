@@ -20,8 +20,10 @@ clean:
 
 install:
 	python3 setup.py install --root="$(or $(DESTDIR),/)" --prefix="$(prefix)"
+	mkdir -p "$(DESTDIR)$(bindir)/"
 	$(INSTALL_PROGRAM) "$(project_name)-command" \
 	    "$(DESTDIR)$(bindir)/$(project_name)"
+	mkdir -p "$(DESTDIR)$(docdir)/"
 	$(INSTALL_DATA) README.md "$(DESTDIR)$(docdir)/"
 
 uninstall:
