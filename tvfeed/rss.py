@@ -65,6 +65,6 @@ def _feed_end ():
 def write_rss (programmes, out_file):
     out_file.write(_feed_start())
     for programme in programmes:
-        tmp_file.write(_feed_item(programme))
+        out_file.write(_feed_item(programme))
     out_file.write(_feed_end())
     out_file.write('\n')
