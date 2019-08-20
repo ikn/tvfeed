@@ -63,8 +63,12 @@ def _feed_end ():
 
 
 def write_rss (programmes, out_file):
+    with open(config.FEED_STORE_PATH, 'a') as tmp_file:
+        for programme in programmes:
+            tmp_file.write(_feed_item(programme))
+
     out_file.write(_feed_start())
-    for programme in programmes:
-        out_file.write(_feed_item(programme))
+    with open(config.FEED_STORE_PATH, 'r') as tmp_file:
+        shutil.copyfileobj(tmp_file, out_file)
     out_file.write(_feed_end())
     out_file.write('\n')

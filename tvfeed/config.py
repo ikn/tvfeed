@@ -29,6 +29,7 @@ class Config:
 
     MATCHES_STORE_PATH = os.path.join(DATA_PATH, 'matches.db')
     FEED_LINK = 'http://localhost:9981/extjs.html'
+    FEED_STORE_PATH = os.path.join(CACHE_PATH, 'feed.xml')
     DATASETS_STORE_PATH = os.path.join(CACHE_PATH, 'datasets')
 
     def load (self):
@@ -51,6 +52,8 @@ class Config:
             self.MATCHES_STORE_PATH = str(config_data['matches_store_path'])
         if 'feed_link' in config_data:
             self.FEED_LINK = str(config_data['feed_link'])
+        if 'feed_store_path' in config_data:
+            self.FEED_STORE_PATH = str(config_data['feed_store_path'])
         if 'datasets_store_path' in config_data:
             self.DATASETS_STORE_PATH = str(config_data['datasets_store_path'])
 
