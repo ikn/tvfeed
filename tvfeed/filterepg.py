@@ -45,8 +45,8 @@ def get_created_year (desc):
             return int(match.groupdict()['n'])
 
 
-def check_rating (imdb_dataset, programme):
-    rating = imdb.get_rating(imdb_dataset, programme)
+def check_rating (imdb_dataset, programme, created_year):
+    rating = imdb.get_rating(imdb_dataset, programme, created_year)
     return rating is None or rating >= config.MIN_IMDB_RATING
 
 
@@ -88,7 +88,7 @@ def filter_programmes (programmes):
             )
 
             if (filters_match and
-                check_rating(imdb_dataset, programme) and
+                check_rating(imdb_dataset, programme, created_year) and
                 # skip programmes seen this execution
                 programme.id_ not in matched_programme_ids and
                 # skip programmes seen in previous executions
