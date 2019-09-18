@@ -12,6 +12,7 @@ from .config import config
 class _Type (Enum):
     """Types of 'episodes' in IMDb datasets."""
     FILM = 'movie'
+    TV_FILM = 'tvmovie'
     SERIES = 'tvseries'
 
 
@@ -66,6 +67,8 @@ def _get_dataset ():
 
             try:
                 type_ = _Type(title_type.lower())
+                if type_ == _Type.TV_FILM:
+                    type_ = _Type.FILM
             except ValueError:
                 continue
             yield (title, type_, created_year, rating)
@@ -103,6 +106,6 @@ def open_dataset ():
 def get_rating (dataset, programme, created_year):
     type_ = _Type.FILM if programme.genre == dvbtuk.Genre.FILM else _Type.SERIES
     for key in _build_dataset_keys(programme.title, type_, created_year):
-        bytes_value = dataset.get()
-        if bytes_value is not None and bytes_value != '':
+        bytes_value = dataset.get(key)
+        if bytes_value is not None and bytes_value != b'':
             return float(bytes_value)
