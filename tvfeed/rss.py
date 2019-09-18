@@ -1,4 +1,6 @@
 import time
+import os
+import html
 from xml.sax.saxutils import escape as escape_xml
 import urllib.parse
 import shutil
@@ -47,13 +49,15 @@ def _feed_item (programme):
     desc_parts = [programme.subtitle, '{} - {}'.format(start, stop)]
     if programme.summary != programme.subtitle:
         desc_parts.append(programme.summary)
+    desc = '\n'.join('<p>{}</p>'.format(html.escape(part))
+                     for part in desc_parts)
 
     return _render_xml(FEED_ITEM_TEMPLATE, {
         'id': programme.id_,
         'title': programme.title,
         'link': 'https://www.imdb.com/find?q={}'.format(
             urllib.parse.quote(programme.title)),
-        'description': '\n\n'.join(desc_parts),
+        'description': desc,
         'published': start,
     })
 
@@ -63,6 +67,7 @@ def _feed_end ():
 
 
 def write_rss (programmes, out_file):
+    os.makedirs(os.path.dirname(config.FEED_STORE_PATH), exist_ok=True)
     with open(config.FEED_STORE_PATH, 'a') as tmp_file:
         for programme in programmes:
             tmp_file.write(_feed_item(programme))
