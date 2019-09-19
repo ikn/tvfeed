@@ -8,7 +8,7 @@ import shutil
 from .config import config
 
 FEED_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S %Z'
-FEED_START_TEMPLATE = '''<?xml version="1.0"?>
+FEED_START_TEMPLATE = '''<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
     <channel>
         <title>Upcoming television programmes</title>
