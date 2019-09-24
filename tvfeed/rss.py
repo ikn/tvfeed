@@ -1,11 +1,20 @@
+import itertools
+import re
 import time
 import os
 import html
-from xml.sax.saxutils import escape as escape_xml
+from xml.sax import saxutils
 import urllib.parse
 import shutil
 
 from .config import config
+
+# unicode characters which aren't valid in XML
+# https://www.w3.org/TR/REC-xml/#charsets
+XML_INVALID_CHARS = itertools.chain(
+    range(0x0, 0x9), range(0xb, 0xd), range(0xe, 0x20))
+XML_INVALID_PATTERN = re.compile(
+    '[' + ''.join(chr(i) for i in XML_INVALID_CHARS) + ']')
 
 FEED_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S %Z'
 FEED_START_TEMPLATE = '''<?xml version="1.0" encoding="utf-8"?>
@@ -27,6 +36,10 @@ FEED_ITEM_TEMPLATE = '''
 FEED_END_TEMPLATE = '''
     </channel>
 </rss>'''
+
+
+def escape_xml (xml):
+    return XML_INVALID_PATTERN.sub('', saxutils.escape(xml))
 
 
 def _render_xml (template, params):
