@@ -41,8 +41,8 @@ class Config:
 
         if 'min_film_year' in config_data:
             self.MIN_FILM_YEAR = int(config_data['min_film_year'])
-        if 'min_film_imdb_rating' in config_data:
-            self.MIN_FILM_IMDB_RATING = int(config_data['min_film_imdb_rating'])
+        if 'min_imdb_rating' in config_data:
+            self.MIN_IMDB_RATING = float(config_data['min_imdb_rating'])
         if 'allowed_series_genres' in config_data:
             self.ALLOWED_SERIES_GENRES = set(
                 getattr(dvbtuk.Genre, genre)

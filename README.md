@@ -43,8 +43,8 @@ properties:
 
 - `min_film_year`: filter films to those released no earlier than this year
   (default: `1990`)
-- `min_film_imdb_rating`: filter programmes to those with an IMDb rating no less
-  than this (default: `5`)
+- `min_imdb_rating`: filter programmes to those with an IMDb rating no less than
+  this (default: `5`)
 - `allowed_series_genres`: filter programmes which are series episodes to those
   with one of these genres, each a string from `pyepgdb.dvbtuk.Genre` (default:
   `UNKNOWN`, `FILM`)
