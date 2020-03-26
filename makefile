@@ -28,4 +28,4 @@ install:
 
 uninstall:
 	./uninstall "$(DESTDIR)" "$(prefix)"
-	$(RM) -r "$(DESTDIR)$(docdir)/"
+	$(RM) -r "$(DESTDIR)$(bindir)/$(project_name)" "$(DESTDIR)$(docdir)/"
