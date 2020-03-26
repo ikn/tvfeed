@@ -59,11 +59,13 @@ def _feed_item (programme):
     start = time.strftime(FEED_DATE_FORMAT, programme.start)
     stop = time.strftime(FEED_DATE_FORMAT, programme.stop)
 
-    desc_parts = [programme.subtitle, '{} - {}'.format(start, stop)]
-    if programme.summary != programme.subtitle:
-        desc_parts.append(programme.summary)
+    desc_parts = [
+        programme.subtitle,
+        '{} - {}'.format(start, stop),
+        programme.summary,
+    ]
     desc = '\n'.join('<p>{}</p>'.format(html.escape(part))
-                     for part in desc_parts)
+                     for part in desc_parts if part)
 
     return _render_xml(FEED_ITEM_TEMPLATE, {
         'id': programme.id_,
