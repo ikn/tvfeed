@@ -55,7 +55,7 @@ def _feed_start ():
     })
 
 
-def _feed_item (programme):
+def _feed_item (programme, imdb_programme):
     start = time.strftime(FEED_DATE_FORMAT, programme.start)
     stop = time.strftime(FEED_DATE_FORMAT, programme.stop)
 
@@ -67,11 +67,17 @@ def _feed_item (programme):
     desc = '\n'.join('<p>{}</p>'.format(html.escape(part))
                      for part in desc_parts if part)
 
+    if imdb_programme is not None:
+        link = 'https://www.imdb.com/title/{}'.format(
+                urllib.parse.quote(imdb_programme['id']))
+    else:
+        link = 'https://www.imdb.com/find?q={}'.format(
+                urllib.parse.quote(programme.title))
+
     return _render_xml(FEED_ITEM_TEMPLATE, {
         'id': programme.id_,
         'title': programme.title,
-        'link': 'https://www.imdb.com/find?q={}'.format(
-            urllib.parse.quote(programme.title)),
+        'link': link,
         'description': desc,
         'published': start,
     })
@@ -84,8 +90,8 @@ def _feed_end ():
 def write_rss (programmes, out_file):
     os.makedirs(os.path.dirname(config.FEED_STORE_PATH), exist_ok=True)
     with open(config.FEED_STORE_PATH, 'a') as tmp_file:
-        for programme in programmes:
-            tmp_file.write(_feed_item(programme))
+        for programme, imdb_programme in programmes:
+            tmp_file.write(_feed_item(programme, imdb_programme))
 
     out_file.write(_feed_start())
     with open(config.FEED_STORE_PATH, 'r') as tmp_file:

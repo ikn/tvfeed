@@ -1,6 +1,7 @@
 from enum import Enum
 import io
 import os
+import json
 import urllib.request
 import dbm
 import gzip
@@ -71,7 +72,7 @@ def _get_dataset ():
                     type_ = _Type.FILM
             except ValueError:
                 continue
-            yield (title, type_, created_year, rating)
+            yield (title_id, title, type_, created_year, rating)
 
 
 def _get_db_path ():
@@ -86,26 +87,37 @@ def _build_dataset_keys (title, type_, created_year):
     return ['|'.join(part.replace('|', '') for part in parts).encode('utf8')
             for parts in keys_parts]
 
+def _build_dataset_value (value):
+    return json.dumps(value).encode('utf8')
+
+def _get_dataset_value (dataset, key):
+    bytes_value = dataset.get(key)
+    if bytes_value is None:
+        return None
+    return json.loads(bytes_value.decode('utf8'))
 
 def update_dataset ():
     db_path = _get_db_path()
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
     with dbm.open(db_path, 'n') as dataset:
-        for title, type_, created_year, rating in _get_dataset():
+        for id_, title, type_, created_year, rating in _get_dataset():
             for key in _build_dataset_keys(title, type_, created_year):
-                if key in dataset and dataset[key] != rating:
-                    dataset[key] = ''
+                if (key in dataset and
+                    _get_dataset_value(dataset, key)['rating'] != rating
+                ):
+                    value = {'id': None, 'rating': None}
                 else:
-                    dataset[key] = rating
+                    value = {'id': id_, 'rating': float(rating)}
+            dataset[key] = _build_dataset_value(value)
 
 
 def open_dataset ():
     return dbm.open(_get_db_path(), 'r')
 
 
-def get_rating (dataset, programme, created_year):
+def get_programme (dataset, programme, created_year):
     type_ = _Type.FILM if programme.genre == dvbtuk.Genre.FILM else _Type.SERIES
     for key in _build_dataset_keys(programme.title, type_, created_year):
-        bytes_value = dataset.get(key)
-        if bytes_value is not None and bytes_value != b'':
-            return float(bytes_value)
+        value = _get_dataset_value(dataset, key)
+        if value is not None and value['id'] is not None:
+            return value
