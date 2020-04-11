@@ -15,6 +15,7 @@ class _Type (Enum):
     FILM = 'movie'
     TV_FILM = 'tvmovie'
     SERIES = 'tvseries'
+    SHORT = 'short'
 
 
 class _DataFile:
@@ -68,7 +69,7 @@ def _get_dataset ():
 
             try:
                 type_ = _Type(title_type.lower())
-                if type_ == _Type.TV_FILM:
+                if type_ in (_Type.TV_FILM, _Type.SHORT):
                     type_ = _Type.FILM
             except ValueError:
                 continue
@@ -108,7 +109,7 @@ def update_dataset ():
                     value = {'id': None, 'rating': None}
                 else:
                     value = {'id': id_, 'rating': float(rating)}
-            dataset[key] = _build_dataset_value(value)
+                dataset[key] = _build_dataset_value(value)
 
 
 def open_dataset ():
